@@ -1,33 +1,11 @@
 import pandas as pd
-import numpy as np
-import math
-import spacy
 import pickle
-import string
 import boto3
 import json
-import re
 
-from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import CountVectorizer
+#from sklearn.linear_model import LogisticRegression
+#from sklearn.feature_extraction.text import CountVectorizer
 
-#stop_words = spacy.lang.pt.stop_words.STOP_WORDS
-punctuations = string.punctuation
-nlp = spacy.load('pt_core_news_sm')
-
-def spacy_tokenizer(sentence):
-    mytokens = nlp(sentence)
-    mytokens = [word.lemma_.lower().strip() if word.lemma_ != "-PRON-" else word.lower_ for word in mytokens]
-    mytokens = [str(word) for word in mytokens if str(word) not in punctuations]
-    return " ".join(mytokens)
-
-def removeChars(sentence):
-    sentence = re.sub(r'(@\w*)', '', sentence)
-    sentence = re.sub(r"http\S+", "", sentence)
-    sentence = re.sub(r'#\w+', "", sentence)
-    sentence = re.sub(r'( +)', " ", sentence)
-    sentence = sentence.strip()
-    sentence = sentence.lower()
 
 def lambda_handler(event, context):
     # Parse input
@@ -46,8 +24,6 @@ def lambda_handler(event, context):
     with open(vector_file_path, 'rb') as f:
         freq_vector = pickle.load(f)  
    
-    removeChars(input)
-    input = spacy_tokenizer(input)
     d = {'corpus': [input]}
     df = pd.DataFrame(data=d)
     
