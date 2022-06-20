@@ -5,7 +5,6 @@ import spacy
 import pickle
 import string
 import boto3
-import os
 import json
 import re
 
@@ -63,8 +62,8 @@ def lambda_handler(event, context):
     }
     
 s3 = boto3.client('s3')
-s3_bucket = os.environ['s3_bucket']
-model_name = os.environ['model_name']
-vector_name = os.environ['vector_name']
+s3_bucket = 'hatespeech-ml'
+model_name = 'pickled_model.p'
+vector_name = 'vector.pickel'
 model_file_path = '/tmp/' + model_name
 vector_file_path = '/tmp/' + vector_name
